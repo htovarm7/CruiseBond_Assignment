@@ -1,4 +1,5 @@
 import { Sailing } from '../types';
+import { Star } from 'lucide-react'; // O cualquier icono que uses
 
 interface Props {
   sailing: Sailing;
@@ -6,15 +7,54 @@ interface Props {
 
 const CruiseCard: React.FC<Props> = ({ sailing }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4">
-      <h2 className="text-xl font-bold">{sailing.ship.name}</h2>
-      <img src={sailing.ship.image} alt={sailing.ship.name} className="w-full h-48 object-cover rounded-md mb-4" />
-      <p>Duration: {sailing.duration} nights</p>
-      <p>Destination: {sailing.itinerary}</p>
-      <p>Region: {sailing.region}</p>
-      <p>Price: ${sailing.price}</p>
-      <p>Rating: ${sailing.ship.rating}</p>
-      <p>Reviews: {sailing.ship.reviews}</p>
+    <div className="flex bg-white rounded-xl shadow-md overflow-hidden w-full h-52">
+      {/* Image section */}
+      <div className="relative w-1/3">
+        <img
+          src={sailing.ship.image}
+          alt={sailing.ship.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-2 left-2 bg-black text-white text-sm px-3 py-1 rounded">
+          {sailing.departureDate ?? "Date TBD"}
+        </div>
+      </div>
+
+      {/* Details section */}
+      <div className="flex flex-col justify-between p-4 w-2/3">
+        <div className="flex justify-between">
+          <div>
+            <h2 className="text-xl font-bold">{sailing.name ?? "Cruise title"}</h2>
+            <p className="text-gray-600">{sailing.region}</p>
+            <div className="flex items-center space-x-2 mt-1">
+              <span>{sailing.duration} nights</span>
+              <span className="flex items-center text-yellow-500">
+                <Star size={16} className="mr-1" />
+                {sailing.ship.rating.toFixed(2)}
+              </span>
+              <span className="text-gray-500 text-sm">{sailing.ship.reviews} reviews</span>
+            </div>
+            <p className="text-sm mt-1 text-gray-700">
+              {sailing.itinerary[0]} → {sailing.itinerary} → {sailing.itinerary[0] ?? sailing.itinerary[-1]}
+            </p>
+          </div>
+
+          <div className="flex flex-col items-end text-right">
+            <img src={sailing.ship.line.logo ?? "/logo.png"} alt="Logo" className="h-6 mb-1" />
+            <p className="text-sm text-gray-500">{sailing.ship.name}</p>
+          </div>
+        </div>
+
+        {/* Price and button */}
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-sm text-gray-500">
+            Interior from <span className="text-xl text-black font-semibold">${sailing.price}</span>
+          </p>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            See sailings
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
