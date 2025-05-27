@@ -6,8 +6,6 @@
  * @observations The rating sorting was not implemented as the rating was a constant value in the provided data.
  */
 
-
-
 import { Sailing } from '../types';
 import { Star } from 'lucide-react'; // O cualquier icono que uses
 
@@ -69,15 +67,20 @@ const CruiseCard: React.FC<Props> = ({ sailing }) => {
               </span>
               <span className="text-gray-500 text-sm">{sailing.ship.reviews} reviews</span>
             </div>
-              <p className="text-sm mt-1 text-gray-700">
-                {sailing.itinerary[0].split(',')[0]} →{" "}
-                {sailing.itinerary.map((city, index) => (
-                  <span key={index}>
-                    {city.split(',')[0]}
-                    {index < sailing.itinerary.length - 1 ? " → " : ""}
-                  </span>
-                ))} → {sailing.itinerary[sailing.itinerary.length - 1].split(',')[0]}
-              </p>
+            {/* Itinerary, this was added because returning from pagination 10 to 9 appeared an error which was caused because an itinerary wasnt available */}
+                {Array.isArray(sailing.itinerary) && sailing.itinerary.length > 0 ? (
+                  <p className="text-sm mt-1 text-gray-700">
+                    {sailing.itinerary[0].split(',')[0]} →{" "}
+                    {sailing.itinerary.map((city, index) => (
+                      <span key={index}>
+                        {city.split(',')[0]}
+                        {index < sailing.itinerary.length - 1 ? " → " : ""}
+                      </span>
+                    ))} → {sailing.itinerary[sailing.itinerary.length - 1].split(',')[0]}
+                  </p>
+                ) : (
+                  <p className="text-sm mt-1 text-gray-500 italic">Itinerary not available</p>
+                )}
           </div>
 
           <div className="flex flex-col items-end text-right">
@@ -88,10 +91,10 @@ const CruiseCard: React.FC<Props> = ({ sailing }) => {
 
         {/* Price and button */}
         <div className="flex justify-between items-center mt-2">
-          <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 transition-colors duration-300 hover:text-blue-600 hover:scale-105">
             Interior from <span className="text-xl text-black font-semibold">${sailing.price}</span>
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+          <button className="bg-blue-600 hover:scale-110 duration-300 hover:bg-blue-700 text-white px-4 py-2 rounded">
             See sailings
           </button>
         </div>
