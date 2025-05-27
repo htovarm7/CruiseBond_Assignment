@@ -3,6 +3,7 @@
 * @author Hector
 * @date 2025-5-25
 * @brief This file contains the TypeScript interfaces for the cruise booking application.
+* It was added an ID field to the Sailing interface to uniquely identify each sailing.
 */
 
 /*

@@ -1,9 +1,36 @@
+/**
+ * @file CruiseCard.tsx
+ * @author Hector
+ * @date 2025-05-25
+ * @description CruiseCard component displays cruise sailing information in a card layout.
+ * @observations The rating sorting was not implemented as the rating was a constant value in the provided data.
+ */
+
+
+
 import { Sailing } from '../types';
 import { Star } from 'lucide-react'; // O cualquier icono que uses
 
 interface Props {
   sailing: Sailing;
 }
+
+const formatDateRange = (startStr: string, endStr: string) => {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+
+  const sameMonth = start.getMonth() === end.getMonth();
+  const month = start.toLocaleString('en-US', { month: 'short' }); // Ej: "Nov"
+  const year = start.getFullYear();
+
+  const startDay = start.getDate();
+  const endDay = end.getDate();
+
+  return sameMonth
+    ? `${month} ${startDay}–${endDay}, ${year}`
+    : `${start.toLocaleString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleString('en-US', { month: 'short', day: 'numeric' })}, ${year}`;
+};
+
 
 const CruiseCard: React.FC<Props> = ({ sailing }) => {
   return (
@@ -16,8 +43,16 @@ const CruiseCard: React.FC<Props> = ({ sailing }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-2 left-2 bg-black text-white text-sm px-3 py-1 rounded">
-          {sailing.departureDate ?? "Date TBD"}
-        </div>
+          {sailing.departureDate && sailing.returnDate
+            ? formatDateRange(sailing.departureDate, sailing.returnDate)
+            : sailing.departureDate
+            ? new Date(sailing.departureDate).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })
+            : "Date TBD"}
+        </div>  
       </div>
 
       {/* Details section */}
@@ -34,13 +69,19 @@ const CruiseCard: React.FC<Props> = ({ sailing }) => {
               </span>
               <span className="text-gray-500 text-sm">{sailing.ship.reviews} reviews</span>
             </div>
-            <p className="text-sm mt-1 text-gray-700">
-              {sailing.itinerary[0]} → {sailing.itinerary} → {sailing.itinerary[0] ?? sailing.itinerary[-1]}
-            </p>
+              <p className="text-sm mt-1 text-gray-700">
+                {sailing.itinerary[0].split(',')[0]} →{" "}
+                {sailing.itinerary.map((city, index) => (
+                  <span key={index}>
+                    {city.split(',')[0]}
+                    {index < sailing.itinerary.length - 1 ? " → " : ""}
+                  </span>
+                ))} → {sailing.itinerary[sailing.itinerary.length - 1].split(',')[0]}
+              </p>
           </div>
 
           <div className="flex flex-col items-end text-right">
-            <img src={sailing.ship.line.logo ?? "/logo.png"} alt="Logo" className="h-6 mb-1" />
+            <img src={sailing.ship.line.logo ?? "/logo.png"} alt="Logo" className="h-8 mb-2" />
             <p className="text-sm text-gray-500">{sailing.ship.name}</p>
           </div>
         </div>

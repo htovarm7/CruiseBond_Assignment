@@ -1,3 +1,11 @@
+/*
+* @file page.tsx
+* @author Hector
+* @date 2025-5-25
+* @brief Main page component for the CruiseBond Assignment. Handles fetching, displaying, and paginating cruise sailings.
+*/
+
+
 "use client";
 import { useEffect, useState } from 'react';
 import { fetchSailings } from '../utils/fetchData';

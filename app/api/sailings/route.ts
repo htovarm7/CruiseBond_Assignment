@@ -1,3 +1,13 @@
+/*
+* @file route.ts
+* @author Hector
+* @date 2025-05-25
+* @brief API route handler for retrieving sailings data from the CruiseBound sandbox API.
+*        Handles GET requests and returns the fetched data as JSON.
+*/
+
+
+
 import { NextResponse } from 'next/server';
 
 export async function GET() {
